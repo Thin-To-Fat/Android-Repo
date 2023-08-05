@@ -1,0 +1,10 @@
+<resources>
+    <string-array name="payments">
+        <item>대금납부일을 선택하세요</item>
+        <item>5일</item>
+        <item>10일</item>
+        <item>15일</item>
+        <item>20일</item>
+        <item>25일</item>
+    </string-array>
+</resources>

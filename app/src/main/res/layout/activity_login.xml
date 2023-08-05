@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:text="LOGIN"-->
+<!--        android:textSize="90px"-->
+<!--        android:gravity="center"-->
+<!--        android:textColor="@android:color/holo_blue_dark"-->
+<!--        />-->
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20px"
+        android:background="@null"
+        android:src="@drawable/logo" />
+
+    <EditText
+        android:id="@+id/idEdit"
+        android:layout_margin="30px"
+        android:layout_width="900px"
+        android:layout_height="50dp"
+        android:hint="아이디"/>
+
+    <EditText
+        android:id="@+id/pwdEdit"
+        android:layout_margin="30px"
+        android:layout_width="900px"
+        android:layout_height="50dp"
+        android:hint="비밀번호"/>
+
+    <Button
+        android:id="@+id/loginBtn"
+        android:layout_marginTop="50px"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="60dp"
+        android:backgroundTint="#0046FF"
+        android:textColor="#FFFFFF"
+        android:textFontWeight="1000"
+        android:textSize="50px"
+        android:text="로그인"/>
+
+
+
+
+
+</LinearLayout>
