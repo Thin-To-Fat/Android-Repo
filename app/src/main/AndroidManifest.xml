@@ -24,8 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".QrActivity"/>
-        <activity android:name=".ResultActivity"/>
+        <activity android:name=".qr.QrActivity"/>
+        <activity android:name=".result.ResultActivity"/>
         <activity android:name=".bnpl.PaymentActivity"/>
     </application>
 

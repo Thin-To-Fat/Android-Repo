@@ -1,15 +1,12 @@
 package com.example.ttf.login
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ttf.PreferenceUtil
 import com.example.ttf.bnpl.PaymentActivity
-import com.example.ttf.QrActivity
+import com.example.ttf.qr.QrActivity
 import com.example.ttf.RequestToServer
 import com.example.ttf.databinding.ActivityLoginBinding
 import retrofit2.Call
@@ -20,19 +17,14 @@ import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        lateinit var pref: SharedPreferences
-        lateinit var editor: SharedPreferences.Editor
+        val pref = this.getPreferences(0)
+        val editor = pref.edit()
 
-        pref = getPreferences(Context.MODE_PRIVATE)
-        editor = pref.edit()
-
-        val preferences = PreferenceUtil(applicationContext)
         super.onCreate(savedInstanceState)
 
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val requestToServer = RequestToServer
         binding.loginBtn.setOnClickListener {
             val email = binding.idEdit.text.toString()
             val pwd = binding.pwdEdit.text.toString()
@@ -53,20 +45,20 @@ class LoginActivity : AppCompatActivity() {
                         call: Call<LoginResponse>,
                         response: Response<LoginResponse>
                     ) {
+                        Log.d("통신22", "${pref.getString("token", "")}")
                         if (response.isSuccessful) {
                             if (response.body()!!.code == "U001") {
                                 Log.d("성공", response.body()!!.result.toString())
-                                editor.putString("token",response.body()!!.result!!.token)
-                                editor.apply()
-                                //prefs.setString("token", response.body()!!.result!!.token)
+                                editor.putString("token", response.body()!!.result!!.token).apply()
 
-                                //preferences.getString("token")
                                 if (response.body()!!.result!!.bnplCk== "0"){ // 대금납부일이 지정 안되어있으면 지정 페이지로
                                     val payIntent = Intent(this@LoginActivity, PaymentActivity::class.java)
+                                    payIntent.putExtra("token", response.body()!!.result!!.token)
                                     startActivity(payIntent)
                                     finish()
                                 } else{ // 대금납부일이 지정 되어있으면 qr 페이지로
                                     val qrIntent = Intent(this@LoginActivity, QrActivity::class.java)
+                                    qrIntent.putExtra("token", response.body()!!.result!!.token)
                                     startActivity(qrIntent)
                                     finish()
                                 }
@@ -84,16 +76,6 @@ class LoginActivity : AppCompatActivity() {
                 })
 
             }
-
-//            if(email == "test1" && pwd == "1234") {
-//                val qrIntent = Intent(this, QrActivity::class.java)
-//                startActivity(qrIntent)
-//                finish()
-//            }else{
-//                Toast.makeText(this, "로그인 실패!", Toast.LENGTH_LONG).show()
-//            }
-            //}
-
 
         }
 

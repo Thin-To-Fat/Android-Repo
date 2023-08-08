@@ -5,15 +5,6 @@
     android:orientation="vertical"
     android:gravity="center">
 
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:text="LOGIN"-->
-<!--        android:textSize="90px"-->
-<!--        android:gravity="center"-->
-<!--        android:textColor="@android:color/holo_blue_dark"-->
-<!--        />-->
 
     <ImageView
         android:layout_width="match_parent"
@@ -35,6 +26,7 @@
         android:layout_margin="30px"
         android:layout_width="900px"
         android:layout_height="50dp"
+        android:inputType="textPassword"
         android:hint="비밀번호"/>
 
     <Button

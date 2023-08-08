@@ -8,21 +8,21 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ttf.PreferenceUtil
-import com.example.ttf.QrActivity
+import com.example.ttf.qr.QrActivity
 import com.example.ttf.R
 import com.example.ttf.RequestToServer
 import com.example.ttf.databinding.ActivityPaymentBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class PaymentActivity: AppCompatActivity() {
 
-    companion object {
-        lateinit var prefs: PreferenceUtil
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        val preferences = PreferenceUtil(applicationContext)
         super.onCreate(savedInstanceState)
+
+        val payIntent = intent
+        val token = payIntent.getStringExtra("token")
 
         val binding = ActivityPaymentBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -35,7 +35,6 @@ class PaymentActivity: AppCompatActivity() {
         binding.spinner.setSelection(1)
         binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                Log.d("hi", itemList[position])
                 selectThing = itemList[position]
                 positions = position
             }
@@ -45,18 +44,33 @@ class PaymentActivity: AppCompatActivity() {
 
         binding.payDayBtn.setOnClickListener{
             if (positions == 0){
-                Log.d("cck", positions.toString())
                 Toast.makeText(this, "날짜를 선택해주세요", Toast.LENGTH_LONG).show()
             }else{
-                Log.d("cck", positions.toString())
-                RequestToServer.service.putBnpl(
-                    token= prefs.getString("token", "default"),
-                    BnplRequest(bnpl = selectThing)
-                )
+                if (token != null) {
+                    RequestToServer.service.putBnpl(
+                        token = token,
+                        bnpl = selectThing.substring(0 until selectThing.length-1)
+                    ).enqueue(object: Callback<BnplResponse>{
+                        override fun onFailure(call: Call<BnplResponse>, t:Throwable){
+                            Log.d("통신실패", "${t.message}")
+                        }
+
+                        override fun onResponse(
+                            call: Call<BnplResponse>,
+                            response: Response<BnplResponse>
+                        ) {
+                            if (response.isSuccessful) {
+                                if (response.body()!!.code == "T004") {
+                                    val qrIntent = Intent(this@PaymentActivity, QrActivity::class.java)
+                                    startActivity(qrIntent)
+                                    finish()
+                                }
+                            }
+                        }
+                    })
+                }
+
             }
-            val qrIntent = Intent(this, QrActivity::class.java)
-            startActivity(qrIntent)
-            finish()
         }
 
     }
