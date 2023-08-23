@@ -62,6 +62,7 @@ class PaymentActivity: AppCompatActivity() {
                             if (response.isSuccessful) {
                                 if (response.body()!!.code == "T004") {
                                     val qrIntent = Intent(this@PaymentActivity, QrActivity::class.java)
+                                    qrIntent.putExtra("token", token)
                                     startActivity(qrIntent)
                                     finish()
                                 }
